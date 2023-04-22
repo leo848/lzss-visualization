@@ -1,6 +1,6 @@
 const width = 21;
 const height = 1;
-const scaleSize = 80;
+const scaleSize = 40;
 
 const padding = 2;
 

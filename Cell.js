@@ -35,7 +35,7 @@ class EmptyCell extends Cell {
     colorMode(HSL);
 
     stroke((noise(this.x / 10, this.y / 10, frameCount / 30) * 360 + frameCount * 2) % 360, 100, 50);
-    strokeWeight(8);
+    strokeWeight(map(scaleSize, 20, 80, 3, 7));
     noFill();
 
     rect(
@@ -74,7 +74,7 @@ class LetterCell extends EmptyCell {
       const buttHeight = 0.1;
 
       stroke(100);
-      strokeWeight(7);
+      strokeWeight(map(scaleSize, 20, 80, 2, 7));
       noFill();
 
       beginShape();
@@ -106,6 +106,7 @@ class LetterCell extends EmptyCell {
       );
     }
 
+    strokeWeight(map(scaleSize, 20, 80, 1, 2));
     textSize(scaleSize - 10);
     textAlign(CENTER, CENTER);
     textFont("Inter");
@@ -332,7 +333,7 @@ class HalfReferenceCell extends EmptyCell {
     textSize(scaleSize * 0.45);
     textAlign(CENTER, CENTER);
     textFont(font);
-    strokeWeight(2);
+    strokeWeight(map(scaleSize, 20, 80, 1, 2));
 
     text(
       this.arrowLeft ? this.dist : this.len,
