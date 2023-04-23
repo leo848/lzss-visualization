@@ -9,6 +9,26 @@
   </head>
   <body>
     <main>
+      <button id="options-button">⚙️</button>
+      <div id="options" class="closed">
+        <h2>Einstellungen</h2>
+        <div id="option-container">
+          <div class="option-h">
+            <div>
+              <h4>Anzahl: <span id="label-width"/></h4>
+              <input type="range" id="input-width" min="2" max="4" step="0.01"/>
+            </div>
+
+            <div>
+              <h4>Gedicht</h4>
+              <select id="input-poem"></select>
+            </div>
+          </div>
+          <textarea id="input-text" placeholder="Auf der Welt ist kein Bestand
+            Wir werden alle sterben
+            Das ist uns wohlbekannt"></textarea>
+        </div>
+      </div>
     </main>
     <script src="strings.js"></script>
     <script src="Cell.js"></script>

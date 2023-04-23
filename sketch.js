@@ -1,4 +1,4 @@
-let width = 21;
+let width = 20;
 let height = 1;
 let scaleSize = 40;
 
@@ -7,28 +7,41 @@ const random = true;
 
 let grid = [];
 let highlight = null;
-let font;
+let fonts = [];
 
 const poem = strings[random ? Math.floor(Math.random() * strings.length) : strings.length - 1];
-const { content: string, author, title } = poem;
+let { content: string, author, title } = poem;
 let index = 0;
 
-function setup() {
-  grid = [];
-  createCanvas(width * scaleSize, height * scaleSize);
-
-  font = loadFont("./iosevka.ttf");
-
+function addMetadata() {
   for (let i = 0; i < title.length; i++) {
     grid.push(new InvertedLetterCell(i, title[i]));
   }
-  grid.push(new EmptyCell(grid.length));
+  while (grid.length % width !== 0) {
+    grid.push(new EmptyCell(grid.length));
+  }
+
   for (let i = 0; i < author.length; i++) {
     grid.push(new InvertedLetterCell(grid.length, author[i]));
   }
   while (grid.length % width !== 0) {
     grid.push(new EmptyCell(grid.length));
   }
+}
+
+function setup() {
+  let button = document.getElementById("options-button");
+  button.addEventListener("click", openOptions);
+
+  grid = [];
+  createCanvas(width * scaleSize, height * scaleSize);
+
+  fonts[0] = loadFont("./iosevka.ttf");
+  fonts[1] = loadFont("./cm.otf");
+
+  addEventListeners();
+
+  addMetadata();
 }
 
 function draw() {
@@ -131,6 +144,92 @@ function mousePressed() {
   } else {
     highlight = null;
     fullRedraw();
-    noLoop();
   }
+}
+
+function openOptions() {
+  const options = document.getElementById("options");
+  const optionsButton = document.getElementById("options-button");
+  const widthInput = document.getElementById("input-width"); // slider
+  const widthLabel = document.getElementById("label-width"); // label
+  const poemInput = document.getElementById("input-poem"); // select
+
+  const textInput = document.getElementById("input-text"); // textarea
+
+  textInput.value = string;
+
+
+  widthInput.value = Math.log(width);
+  widthLabel.innerText = width;
+
+  if (options.classList.contains("closed")) {
+    options.classList.remove("closed");
+    optionsButton.innerText = "❌";
+    noLoop();
+  } else {
+    options.classList.add("closed");
+    optionsButton.innerText = "⚙️";
+    fullRedraw();
+    loop();
+  }
+}
+
+
+function addEventListeners() {
+  const options = document.getElementById("options");
+  const optionsButton = document.getElementById("options-button");
+  const widthInput = document.getElementById("input-width"); // slider
+  const widthLabel = document.getElementById("label-width"); // label
+  const poemInput = document.getElementById("input-poem"); // select
+
+  const textInput = document.getElementById("input-text"); // textarea
+
+  // Clear children, and add all poems as options
+  while (poemInput.firstChild) {
+    poemInput.removeChild(poemInput.firstChild);
+  }
+  let poems = strings.slice().sort((a, b) => a.title.localeCompare(b.title));
+  let optionCustom = document.createElement("option");
+  optionCustom.value = -1;
+  optionCustom.innerText = "Eigene Eingabe";
+  poemInput.appendChild(optionCustom);
+
+  for (let i = 0; i < poems.length; i++) {
+    let option = document.createElement("option");
+    option.value = i;
+    option.innerText = poems[i].title;
+    poemInput.appendChild(option);
+  }
+
+  poemInput.addEventListener("change", () => {
+    let poemIndex = poemInput.value;
+    if (poemIndex == -1) {
+      string = textInput.value;
+      index = 0;
+      grid = [];
+      // addMetadata();
+    } else {
+      let { content: newString, author: newAuthor, title: newTitle } = poems[poemIndex];
+      textInput.value = newString;
+      string = newString;
+      author = newAuthor;
+      title = newTitle;
+      index = 0;
+      grid = [];
+      addMetadata();
+    }
+  });
+
+  textInput.addEventListener("input", () => {
+    string = textInput.value;
+    index = 0;
+    grid = [];
+    // addMetadata();
+  })
+
+  widthInput.addEventListener("input", () => {
+    width = Math.floor(Math.exp(widthInput.value));
+    widthLabel.innerText = width;
+    scaleSize = Math.floor(800 / width);
+  });
 }

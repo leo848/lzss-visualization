@@ -89,7 +89,7 @@ class LetterCell extends EmptyCell {
     strokeWeight(map(scaleSize, 20, 80, 1, 2));
     textSize(scaleSize - 10);
     textAlign(CENTER, CENTER);
-    textFont("Inter");
+    textFont("Inter, Helvetica");
     text(
       this.letter,
       this.x * scaleSize + scaleSize / 2,
@@ -323,7 +323,7 @@ class ReferenceCell extends EmptyCell {
 
     textSize(scaleSize * 0.3);
     textAlign(CENTER, CENTER);
-    textFont(font);
+    textFont(fonts[0]);
 
     text(
       this.dist,
@@ -398,7 +398,7 @@ class HalfReferenceCell extends EmptyCell {
 
     textSize(scaleSize * 0.45);
     textAlign(CENTER, CENTER);
-    textFont(font);
+    textFont(fonts[0]);
     strokeWeight(map(scaleSize, 20, 80, 1, 2));
 
     text(
