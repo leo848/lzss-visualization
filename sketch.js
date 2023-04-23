@@ -37,7 +37,6 @@ function setup() {
   createCanvas(width * scaleSize, height * scaleSize);
 
   fonts[0] = loadFont("./iosevka.ttf");
-  fonts[1] = loadFont("./cm.otf");
 
   addEventListeners();
 
@@ -203,6 +202,7 @@ function addEventListeners() {
 
   poemInput.addEventListener("change", () => {
     let poemIndex = poemInput.value;
+    poemInput.value = -1;
     if (poemIndex == -1) {
       string = textInput.value;
       index = 0;
