@@ -3,6 +3,7 @@ const height = 1;
 const scaleSize = 40;
 
 const padding = 2;
+const random = false;
 
 let grid = [];
 let highlight = null;
@@ -210,7 +211,7 @@ const strings = [
   "vater komm erzähl vom krieg\nvater komm erzähl wiest eingrückt bist\nvater komm erzähl wiest gschossen hast\nvater komm erzähl wiest verwundt worden bist\nvater komm erzähl wiest gfallen bist\nvater komm erzähl vom krieg\n ",
   "Warum, ach sag, warum\ngeht nun die Sonne fort?\nSchlaf ein, mein Kind, und träume sacht,\ndas kommt wohl von der dunklen Nacht,\nda geht die Sonne fort.\n\nWarum, ach sag, warum\nwird unsere Stadt so still?\nSchlaf ein, mein Kind, und träume sacht,\ndas kommt wohl von der dunklen Nacht,\nweil sie dann schlafen will.\n\nWarum, ach sag, warum\nbrennt die Laterne so?\nSchlaf ein, mein Kind, und träume sacht,\ndas kommt wohl von der dunklen Nacht,\nda brennt sie lichterloh!\n\nWarum, ach sag, warum\ngehn manche Hand in Hand?\nSchlaf ein, mein Kind, und träume sacht,\ndas kommt wohl von der dunklen Nacht,\nda geht man Hand in Hand.\n\nWarum, ach sag, warum\nist unser Herz so klein?\nSchlaf ein, mein Kind, und träume sacht,\ndas kommt wohl von der dunklen Nacht,\nda sind wir ganz allein."
 ];
-const string = strings[Math.floor(Math.random() * strings.length)];
+const string = strings[random ? Math.floor(Math.random() * strings.length) : strings.length - 1];
 let index = 0;
 
 function setup() {
@@ -236,7 +237,7 @@ function draw() {
       grid[i].draw();
       if (highlight !== null) {
         if (highlight[0] <= i && i < highlight[1]) {
-          grid[i].highlight(i);
+          grid[i].highlight();
         }
       }
     }
@@ -246,7 +247,7 @@ function draw() {
     grid[i].draw();
     if (highlight !== null) {
       if (highlight[0] <= i && i < highlight[1]) {
-        grid[i].highlight(i);
+        grid[i].highlight();
       }
     }
   }
@@ -306,8 +307,15 @@ function mousePressed() {
       highlight = newHighlight;
     } else if (newHighlight[0] == highlight[0] && newHighlight[1] == highlight[1]) {
       highlight = null;
+      draw();
+      noLoop();
     } else {
       highlight = newHighlight;
+      loop();
     }
+  } else {
+    highlight = null;
+    draw();
+    noLoop();
   }
 }

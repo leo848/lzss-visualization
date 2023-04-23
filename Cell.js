@@ -31,7 +31,7 @@ class EmptyCell extends Cell {
     return 0;
   }
 
-  highlight(index) {
+  highlight() {
     colorMode(HSL);
 
     stroke((noise(this.x / 10, this.y / 10, frameCount / 30) * 360 + frameCount * 2) % 360, 100, 50);
@@ -67,7 +67,27 @@ class LetterCell extends EmptyCell {
 
     if (this.letter === "\n") {
       // draw arrow instead
+      this.drawEnter();
+    } else if (this.letter === " ") {
+      this.drawSpace();
+    }
 
+    strokeWeight(map(scaleSize, 20, 80, 1, 2));
+    textSize(scaleSize - 10);
+    textAlign(CENTER, CENTER);
+    textFont("Inter");
+    text(
+      this.letter,
+      this.x * scaleSize + scaleSize / 2,
+      this.y * scaleSize + scaleSize / 2
+    );
+  }
+
+  bytes() {
+    return 1;
+  }
+
+  drawEnter() {
       const height = 0.3;
       const width = 0.4;
       const buttWidth = 0.1;
@@ -104,21 +124,36 @@ class LetterCell extends EmptyCell {
         this.x * scaleSize + scaleSize * (0.5 - width / 2 + buttWidth),
         this.y * scaleSize + scaleSize * (0.4 + height / 2 + buttHeight)
       );
-    }
-
-    strokeWeight(map(scaleSize, 20, 80, 1, 2));
-    textSize(scaleSize - 10);
-    textAlign(CENTER, CENTER);
-    textFont("Inter");
-    text(
-      this.letter,
-      this.x * scaleSize + scaleSize / 2,
-      this.y * scaleSize + scaleSize / 2
-    );
   }
 
-  bytes() {
-    return 1;
+  drawSpace() {
+    const y = 0.7;
+    const height = 0.15;
+    const width = 0.5;
+
+    stroke(180);
+    strokeWeight(map(scaleSize, 20, 80, 2, 6));
+    strokeCap(SQUARE);
+    noFill();
+
+    beginShape();
+    vertex(
+      this.x * scaleSize + scaleSize * (0.5 - width / 2),
+      this.y * scaleSize + scaleSize * (y - height / 2)
+    );
+    vertex(
+      this.x * scaleSize + scaleSize * (0.5 - width / 2),
+      this.y * scaleSize + scaleSize * (y + height / 2)
+    );
+    vertex(
+      this.x * scaleSize + scaleSize * (0.5 + width / 2),
+      this.y * scaleSize + scaleSize * (y + height / 2)
+    );
+    vertex(
+      this.x * scaleSize + scaleSize * (0.5 + width / 2),
+      this.y * scaleSize + scaleSize * (y - height / 2)
+    );
+    endShape();
   }
 }
 
