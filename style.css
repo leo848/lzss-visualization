@@ -29,11 +29,14 @@ main button#options-button:hover {
 }
 
 main #options.closed {
+  transform: translateX(-50%) translateY(-100%) scale(0.5);
   opacity: 0;
 }
 
 main #options {
   opacity: 1;
+  transform: translateX(-50%) translateY(0%) scale(1);
+  display: block;
   position: absolute;
   top: 50px;
   left: 50%;
@@ -103,3 +106,4 @@ main #options h4 {
   columns: 200;
   border: 5px solid rgba(0, 0, 0, 0.2);
 }
+

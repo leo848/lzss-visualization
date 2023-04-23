@@ -9,7 +9,8 @@ let grid = [];
 let highlight = null;
 let fonts = [];
 
-const poem = strings[random ? Math.floor(Math.random() * strings.length) : strings.length - 1];
+let poemIndex = random ? Math.floor(Math.random() * strings.length) : strings.length - 1
+const poem = strings[poemIndex];
 let { content: string, author, title } = poem;
 let index = 0;
 
@@ -155,8 +156,8 @@ function openOptions() {
 
   const textInput = document.getElementById("input-text"); // textarea
 
+  poemInput.value = poemIndex;
   textInput.value = string;
-
 
   widthInput.value = Math.log(width);
   widthLabel.innerText = width;
@@ -187,7 +188,7 @@ function addEventListeners() {
   while (poemInput.firstChild) {
     poemInput.removeChild(poemInput.firstChild);
   }
-  let poems = strings.slice().sort((a, b) => a.title.localeCompare(b.title));
+  let poems = strings.slice() // .sort((a, b) => a.title.localeCompare(b.title));
   let optionCustom = document.createElement("option");
   optionCustom.value = -1;
   optionCustom.innerText = "Eigene Eingabe";
@@ -202,7 +203,6 @@ function addEventListeners() {
 
   poemInput.addEventListener("change", () => {
     let poemIndex = poemInput.value;
-    poemInput.value = -1;
     if (poemIndex == -1) {
       string = textInput.value;
       index = 0;
@@ -221,6 +221,8 @@ function addEventListeners() {
   });
 
   textInput.addEventListener("input", () => {
+    poemInput.value = -1;
+    poemIndex = -1;
     string = textInput.value;
     index = 0;
     grid = [];

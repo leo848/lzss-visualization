@@ -32,7 +32,5 @@ function findLongestMatch(array, index) {
 
   let offset = index - startIndex;
 
-  console.log(offset, length);
-
   return [offset, length];
 }
