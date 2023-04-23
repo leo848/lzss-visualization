@@ -9,14 +9,15 @@ class Cell {
 }
 
 class EmptyCell extends Cell {
-  constructor(x, y) {
+  constructor(index) {
     super();
-    this.x = x;
-    this.y = y;
+    this.index = index;
+    this.x = index % width;
+    this.y = Math.floor(index / width);
   }
   draw() {
-    fill(200);
-      stroke(30);
+    fill(this.fillColor());
+    stroke(this.strokeColor());
     strokeWeight(2);
     rect(
       this.x * scaleSize + padding,
@@ -29,6 +30,19 @@ class EmptyCell extends Cell {
 
   bytes() {
     return 0;
+  }
+
+  fillColor() {
+    return color(200);
+  }
+
+  strokeColor() {
+    return color(0);
+  }
+
+  resetCoords() {
+    this.x = this.index % width;
+    this.y = Math.floor(this.index / width);
   }
 
   highlight() {
@@ -51,19 +65,19 @@ class EmptyCell extends Cell {
 }
 
 class LetterCell extends EmptyCell {
-  constructor(x, y, letter) {
+  constructor(index, letter) {
     assert(
       typeof letter === "string" && (letter.length === 1 ||
         letter.startsWith("\\")),
-      "LetterCell: letter must be a string of length 1"
+      "LetterCell: letter must be a string of length 1, got: " + letter
     );
-    super(x, y);
+    super(index);
     this.letter = letter;
   }
   draw() {
     super.draw();
 
-    fill(0);
+    fill(this.strokeColor());
 
     if (this.letter === "\n") {
       // draw arrow instead
@@ -157,14 +171,31 @@ class LetterCell extends EmptyCell {
   }
 }
 
+class InvertedLetterCell extends LetterCell {
+  constructor(index, letter) {
+    super(index, letter);
+  }
+
+  fillColor() {
+    return color(0);
+  }
+
+  strokeColor() {
+    return color(200);
+  }
+
+  drawSpace() {
+    // noop
+  }
+}
+
 class MarkerCell extends EmptyCell {
-  constructor(x, y, offset, len, index) {
+  constructor(index, offset, len) {
     assert(typeof len === "number", "MarkerCell: len must be a number");
     assert(len >= 0, "MarkerCell: len must be non-negative");
-    super(x, y);
+    super(index);
     this.len = len;
     this.offset = offset;
-    this.index = index;
 
     colorMode(HSL);
 
@@ -233,8 +264,8 @@ class MarkerCell extends EmptyCell {
 }
 
 class ReferenceCell extends EmptyCell {
-  constructor(x, y, dist, len) {
-    super(x, y);
+  constructor(index, dist, len) {
+    super(index);
     this.dist = dist;
     this.len = len;
 
@@ -313,8 +344,8 @@ class ReferenceCell extends EmptyCell {
 }
 
 class HalfReferenceCell extends EmptyCell {
-  constructor(x, y, dist, len, arrowLeft, marker) {
-    super(x, y);
+  constructor(index, dist, len, arrowLeft, marker) {
+    super(index);
     this.dist = dist;
     this.len = len;
     this.arrowLeft = arrowLeft;
